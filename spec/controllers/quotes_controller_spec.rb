@@ -23,6 +23,7 @@ RSpec.describe QuotesController, type: :controller do
       
       it "changes the quotes count by +1" do
         expect { valid_request }.to change { Quote.count }.by(1)
+        
       end
 
       it "redirects to the show page" do

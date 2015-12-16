@@ -15,7 +15,10 @@ class QuotesController < ApplicationController
       render :new
     end
   end
-
+  
+  def index
+    @quotes = Quote.all
+  end
   private
 
   def quote_params
