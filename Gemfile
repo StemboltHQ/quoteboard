@@ -18,11 +18,11 @@ gem 'devise'
 group :development, :test do
   gem 'byebug'
   gem 'faker'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails' 
 end
 
 group :test do
-  gem 'rspec-rails'
-  gem 'factory_girl_rails' 
   gem 'capybara'
 end
 
