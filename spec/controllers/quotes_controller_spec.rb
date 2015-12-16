@@ -45,4 +45,30 @@ RSpec.describe QuotesController, type: :controller do
       end
     end
   end
+  describe "#edit" do
+  end
+  describe "#show" do
+    before { get :show, id: quote.id }
+
+    it "renders the show template" do
+      expect(response).to render_template(:show)
+    end
+
+    it "instantiates an instance variable with the passed id" do
+      expect(assigns(:quote)).to eq(quote)
+    end
+  end
+  describe "#index" do
+    it "renders the index template" do
+      get :index
+      expect(response).to render_template(:index)
+    end
+
+    it "instantiates quotes variable which is all quotes" do
+      quote
+      quote_1 = create(:quote)
+      get :index
+      expect(assigns(:quotes)).to eq([quote, quote_1])
+    end
+  end 
 end
