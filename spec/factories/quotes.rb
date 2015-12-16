@@ -1,9 +1,8 @@
 FactoryGirl.define do
   factory :quote do
-    author "MyString"
-body "MyText"
-user nil
-location "MyString"
+    author Faker::Name.first_name
+    body   Faker::Lorem.sentences
+    location Faker::Address.street_address
   end
 
 end
