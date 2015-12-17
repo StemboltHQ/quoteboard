@@ -1,0 +1,5 @@
+<%= quote.author %> said, "<%= quote.body %>", in the <%= quote.location %>
+<% if quote.user == current_user %> 
+  <%= link_to "delete quote", quote_path(quote), method: :delete  %>
+  <%= link_to "edit quote", edit_quote_path(quote) %>
+<% end %>
