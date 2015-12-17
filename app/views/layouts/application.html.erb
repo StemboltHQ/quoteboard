@@ -11,7 +11,8 @@
       <%= link_to "Add Quote", new_quote_path %>
       <%= link_to "All Quotes", quotes_path %>
     </div>
+    <p class="notice"> <%= notice %></p>
+    <p class="alert"><%= alert %></p>
     <%= yield %>
-
   </body>
 </html>
