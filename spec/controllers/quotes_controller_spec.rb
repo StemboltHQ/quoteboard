@@ -81,6 +81,16 @@ RSpec.describe QuotesController, type: :controller do
       end
     end
 
+    context 'with user signed in' do
+      before { login_with user }
+      context 'user owns the campaign' do
+        it 'renders the edit remplate' do
+          get :edit, id: quote.id
+          expect(response).to render_template(:edit)
+        end
+      end
+    end
+
   end
   describe "#show" do
     context "without user signed in" do
