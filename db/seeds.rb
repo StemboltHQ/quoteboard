@@ -12,3 +12,9 @@
     location: Faker::Address.street_address
   )
 end
+
+User.create!(
+  email: "g@g.com",
+  password: "asdfjkl;",
+  password_confirmation: "asdfjkl;"
+)
