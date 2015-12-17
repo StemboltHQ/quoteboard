@@ -1,4 +1,6 @@
 class QuotesController < ApplicationController
+  before_action :authenticate_user!
+
   def show
     @quote = Quote.find params[:id]
   end
