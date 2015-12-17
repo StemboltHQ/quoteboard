@@ -1,6 +1,9 @@
 <% @quotes.each do |q| %>
   <div>
     <%= q.author %> said, "<%= q.body %>", in the <%= q.location %>
+    <% if q.user == current_user %> 
+      <%= link_to "delete quote", quote_path(q), method: :delete  %>
+    <% end %>
   </div>
 <% end %>
 

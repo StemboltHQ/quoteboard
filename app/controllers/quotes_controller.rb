@@ -9,6 +9,15 @@ class QuotesController < ApplicationController
     @quote = current_user.quotes.find params[:id]
   end
 
+  def update
+    @quote = current_user.quotes.find params[:id]
+    if @quote.update quote_params
+      redirect_to @quote
+    else
+      render :edit
+    end
+  end
+
   def new
     @quote = Quote.new
   end
@@ -26,6 +35,13 @@ class QuotesController < ApplicationController
   def index
     @quotes = Quote.all
   end
+  
+  def destroy
+    @quote = current_user.quotes.find params[:id]
+    @quote.destroy
+    redirect_to quotes_path
+  end
+
   private
 
   def quote_params
