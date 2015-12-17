@@ -1,6 +1,6 @@
 <% @quotes.each do |q| %>
   <div>
-    <%= q.author %> said <%= q.body %>
+    <%= q.author %> said, "<%= q.body %>", in the <%= q.location %>
   </div>
 <% end %>
 
