@@ -12,6 +12,10 @@ class QuotesController < ApplicationController
   def error
   end
 
+  def edit
+    @quote = Quote.find params[:id]
+  end
+
   def new
     @quote = Quote.new
   end
