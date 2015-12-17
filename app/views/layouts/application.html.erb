@@ -7,7 +7,10 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+  <div>
+    <%= link_to "Add Quote", new_quote_path %>
+    <%= link_to "All Quotes", quotes_path %>
+  </div>
 <%= yield %>
 
 </body>
