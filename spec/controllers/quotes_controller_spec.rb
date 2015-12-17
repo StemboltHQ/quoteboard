@@ -72,13 +72,33 @@ RSpec.describe QuotesController, type: :controller do
   end
 
   describe "#edit" do
+    subject { get :show, id: quote.id }
     context 'without user signed in' do
       it 'redirects to the sign in page' do
         get :edit, id: quote.id
         expect(response).to redirect_to new_user_session_path
       end
     end
+    context 'with user signed in' do
+      before { login_with user }
+      context 'user owns the quote' do
+        it 'renders the edit template' do
+          expect(subject).to render_template(:edit)
+        end
+        it 'instantiates the correct quote instance variable' do
+          subject
+          expect(assigns(:quote)).to eq(quote)
+        end
+      end
+      context 'user doesn"t own the quote' do
+        before { login_with user_1 }
+        it "throws an error" do
+          expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
   end
+
   describe "#show" do
     subject { get :show, id: quote.id }
     context "without user signed in" do
