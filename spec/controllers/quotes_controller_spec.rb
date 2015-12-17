@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe QuotesController, type: :controller do
-  let(:quote)    { create(:quote) }
   let(:user)     { create(:user)  }
+  let(:quote)    { create(:quote, user: user) }
 
   describe "#new" do
     subject { get :new }
@@ -46,7 +46,12 @@ RSpec.describe QuotesController, type: :controller do
         it "redirects to the show page" do
           expect(subject).to redirect_to quote_path(Quote.last)
         end
+        it 'associates quote with creating user' do
+          subject
+          expect(Quote.last.user).to eq(user)
+        end
       end
+
       context "with invalid parameters" do
         subject { post :create, params }
         let(:params) { { quote: { body: nil } } }
