@@ -20,6 +20,9 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails' 
   gem 'capybara'
+  gem 'hirb' 
+  gem 'awesome_print'
+  gem 'interactive_editor'
 end
 
 group :development do
