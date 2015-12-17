@@ -13,9 +13,7 @@ RSpec.describe QuotesController, type: :controller do
       end
     end
     context "with user signed in" do
-      before do
-        login_with user
-      end
+      before { login_with user }
       it "renders the new template" do
         expect(subject).to render_template(:new)
       end
@@ -135,6 +133,65 @@ RSpec.describe QuotesController, type: :controller do
       it "instantiates a quotes variable containing all quotes" do
         subject
         expect(assigns(:quotes)).to eq([quote])
+      end
+    end
+  end
+  describe "#update" do
+    context "without user signed in" do
+      it "redirects to the sign in page" do
+        post :create
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+    context "with user signed in" do
+      before { login_with user }
+      context "with quote owner" do
+        context 'with valid update attributes' do
+          subject { patch :update, id: quote.id, quote: { body: "hello" } }
+          it 'updates the passed values in the database' do
+            subject
+            expect(quote.reload.body).to eq('hello')
+          end
+          it 'redirects to the show page' do
+            expect(subject).to redirect_to quote_path(quote)
+          end
+        end
+        context 'with invalid update attributes' do
+          subject { patch :update, id: quote.id, quote: { body: nil } }
+          it 'renders the edit template' do
+            expect(subject).to render_template :edit
+          end
+          it "doesn't update the database" do
+            subject
+            expect(quote.reload.body).to_not eq(nil)
+          end
+        end
+      end
+    end
+  end
+  describe "#delete" do
+    context "without a signed in user" do
+      it "redirects to the sign in page" do
+        delete :destroy, id: quote.id
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+    context "with a signed in user" do
+      before { login_with user }
+      context "with the user that owns the quote" do
+        before { delete :destroy, id: quote.id }
+        it 'redirects to the index page' do
+          expect(response).to redirect_to quotes_path
+        end
+        it 'remove the quote from the database' do
+          expect(Quote.find_by_id(quote.id)).to_not be
+        end
+      end
+      context "with non owner logged in" do
+        before { login_with user_1 }
+        it 'throws an error' do
+          expect { delete :destroy, id: quote.id }.to raise_error ActiveRecord::RecordNotFound
+        end
       end
     end
   end
