@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe QuotesController, type: :controller do
-  let(:user)     { create(:user)  }
+  let(:user)     { create(:user) }
+  let(:user_1)   { create(:user) }
   let(:quote)    { create(:quote, user: user) }
 
   describe "#new" do
@@ -75,8 +76,7 @@ RSpec.describe QuotesController, type: :controller do
     subject { get :show, id: quote.id }
     context 'without user signed in' do
       it 'redirects to the sign in page' do
-        get :edit, id: quote.id
-        expect(response).to redirect_to new_user_session_path
+        expect(subject).to redirect_to new_user_session_path
       end
     end
     context 'with user signed in' do
