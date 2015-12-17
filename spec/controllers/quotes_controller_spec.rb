@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe QuotesController, type: :controller do
-  let(:quote)    { create(:quote) }
   let(:user)     { create(:user)  }
+  let(:quote)    { create(:quote, user:user) }
+
   describe "#new" do 
     context "with user not signed in" do
       it "redirects to sign in page" do
@@ -44,14 +45,18 @@ RSpec.describe QuotesController, type: :controller do
         
         it "changes the quotes count by +1" do
           expect { valid_request }.to change { Quote.count }.by(1)
-          
         end
 
         it "redirects to the show page" do
           valid_request
           expect(response).to redirect_to quote_path(Quote.last)
         end
+        it 'associates quote with creating user' do
+          valid_request
+          expect(Quote.last.user).to eq(user)
+        end
       end
+
       context "with invalid parameters" do
         def invalid_request
           post :create, quote: attributes_for(:quote).merge({body: nil})
