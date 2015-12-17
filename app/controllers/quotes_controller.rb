@@ -6,7 +6,7 @@ class QuotesController < ApplicationController
   end
   
   def edit
-    @quote = Quote.find params[:id]
+    @quote = current_user.quotes.find params[:id]
   end
 
   def new

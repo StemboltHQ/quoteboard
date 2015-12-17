@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe QuotesController, type: :controller do
-  let(:user)     { create(:user)  }
+  let(:user)     { create(:user) }
+  let(:user_1)   { create(:user) }
   let(:quote)    { create(:quote, user:user) }
 
   describe "#new" do 
@@ -83,14 +84,22 @@ RSpec.describe QuotesController, type: :controller do
 
     context 'with user signed in' do
       before { login_with user }
-      context 'user owns the campaign' do
+      context 'user owns the quote' do
+        before { get :edit, id: quote.id }
         it 'renders the edit remplate' do
-          get :edit, id: quote.id
           expect(response).to render_template(:edit)
+        end
+        it 'instantiates the correct quote instance variable' do
+          expect(assigns(:quote)).to eq(quote)
+        end
+      end
+      context 'user doesn"t own the quote' do
+        before { login_with user_1 }
+        it "throws an error" do
+          expect { get :edit, id: quote.id }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
     end
-
   end
   describe "#show" do
     context "without user signed in" do
