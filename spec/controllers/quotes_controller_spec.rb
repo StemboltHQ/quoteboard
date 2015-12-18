@@ -37,6 +37,7 @@ RSpec.describe QuotesController, type: :controller do
       context "with valid parameters" do
         subject { post :create, params }
         let(:params) { { quote: attributes_for(:quote) } }
+        subject { post :create, quote: attributes_for(:quote) }
 
         it "changes the quotes count by +1" do
           expect { subject }.to change { Quote.count }.by(1)
@@ -71,7 +72,7 @@ RSpec.describe QuotesController, type: :controller do
   end
 
   describe "#edit" do
-    subject { get :show, id: quote.id }
+    subject { get :edit, id: quote.id }
     context 'without user signed in' do
       it 'redirects to the sign in page' do
         expect(subject).to redirect_to new_user_session_path
