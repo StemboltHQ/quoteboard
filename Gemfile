@@ -18,9 +18,9 @@ gem 'devise'
 group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
-  gem 'factory_girl_rails' 
+  gem 'factory_girl_rails'
   gem 'capybara'
-  gem 'hirb' 
+  gem 'hirb'
   gem 'awesome_print'
   gem 'interactive_editor'
 end
@@ -29,4 +29,3 @@ group :development do
   gem 'web-console', '~> 2.0'
   gem 'spring'
 end
-
