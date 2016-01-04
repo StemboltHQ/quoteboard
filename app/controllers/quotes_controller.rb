@@ -1,6 +1,21 @@
 class QuotesController < ApplicationController
+  before_action :authenticate_user!
+
   def show
     @quote = Quote.find params[:id]
+  end
+
+  def edit
+    @quote = current_user.quotes.find params[:id]
+  end
+
+  def update
+    @quote = current_user.quotes.find params[:id]
+    if @quote.update quote_params
+      redirect_to @quote
+    else
+      render :edit
+    end
   end
 
   def new
@@ -9,6 +24,7 @@ class QuotesController < ApplicationController
 
   def create
     @quote = Quote.new quote_params
+    @quote.created_by = current_user
     if @quote.save
       redirect_to @quote
     else
@@ -18,6 +34,12 @@ class QuotesController < ApplicationController
 
   def index
     @quotes = Quote.all
+  end
+
+  def destroy
+    @quote = current_user.quotes.find params[:id]
+    @quote.destroy
+    redirect_to quotes_path
   end
 
   private
