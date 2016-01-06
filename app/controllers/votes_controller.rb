@@ -18,6 +18,12 @@ class VotesController < ApplicationController
     redirect_to quotes_path
   end
 
+  def destroy
+    @vote = current_user.votes.find params[:id]
+    flash[:notice] = "Vote deleted" if @vote.destroy
+    redirect_to quotes_path
+  end
+
   private
 
   def vote_params
