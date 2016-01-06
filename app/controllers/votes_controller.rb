@@ -11,6 +11,16 @@ class VotesController < ApplicationController
     redirect_to quotes_path
   end
 
+  def update
+    @quote = current_quote
+    vote = @quote.votes.find_by!(user: current_user)
+    if vote.update vote_params
+      redirect_to quotes_path, notice: "Vote updated"
+    else
+      redirect_to quotes_path, alert: "Vote failed to update"
+    end
+  end
+
   private
 
   def vote_params
