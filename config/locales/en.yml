@@ -21,3 +21,9 @@
 
 en:
   hello: "Hello world"
+  votes: {
+    hate_it: "I hate it",
+    against_it: "I'm against it",
+    like_it: "I like it",
+    love_it: "I love it"
+    }
