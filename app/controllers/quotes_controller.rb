@@ -3,6 +3,8 @@ class QuotesController < ApplicationController
 
   def show
     @quote = Quote.find params[:id]
+    @vote = @quote.votes.find_by(user: current_user)
+    @user_votes = User.where(id: current_user.id).first.votes
   end
 
   def edit
@@ -34,6 +36,7 @@ class QuotesController < ApplicationController
 
   def index
     @quotes = Quote.all
+    @user_votes = User.where(id: current_user.id).first.votes
   end
 
   def destroy
