@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :vote do
-    value { 1 }
+    value { :like_it }
     user
     quote
   end

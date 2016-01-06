@@ -7,8 +7,6 @@ class VotesController < ApplicationController
     @vote.user = current_user
     if @vote.save
       flash[:notice] = "Voted!"
-    else
-      flash.now[:alert] = "Something went wrong!"
     end
     redirect_to quotes_path
   end

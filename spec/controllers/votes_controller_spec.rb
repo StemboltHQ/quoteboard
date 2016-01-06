@@ -35,16 +35,9 @@ RSpec.describe VotesController, type: :controller do
       end
       context "with invalid parameters" do
         subject { post :create, params }
-        let(:params) { { quote_id: quote.id, vote: { value: 55 } } }
-        it { is_expected.to redirect_to quotes_path }
-
-        it "sets a flash alert message" do
-          subject
-          expect(flash[:alert]).to include("Something")
-        end
-
+        let(:params) { { quote_id: quote.id, vote: { value: :i_am_indifferent } } }
         it "doesn't create a vote" do
-          expect { subject }.to change { Vote.count }.by(0)
+          expect { subject }.to raise_error(ArgumentError)
         end
       end
     end
@@ -62,12 +55,12 @@ RSpec.describe VotesController, type: :controller do
       context "with a user that owns the vote" do
         context "with a valid update value" do
           subject { patch :update, params }
-          let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: 2 } } }
+          let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: :love_it } } }
           it { is_expected.to redirect_to quotes_path }
 
           it "changes the vote value" do
             subject
-            expect(vote.reload.value).to eq(2)
+            expect(vote.reload.value).to eq("love_it")
           end
 
           it "sets a flash notice" do
@@ -77,18 +70,16 @@ RSpec.describe VotesController, type: :controller do
         end
         context "with an invalid update value" do
           subject { patch :update, params }
-          let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: 99 } } }
-          it { is_expected.to redirect_to quotes_path }
+          let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: :unsure } } }
           it "doesn't change the vote value" do
-            subject
-            expect(vote.reload.value).to eq(1)
+            expect { subject }.to raise_error(ArgumentError)
           end
         end
       end
       context "with a user that doesn't own the vote" do
         before { login_with user_1 }
         subject { patch :update, params }
-        let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: 2 } } }
+        let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: :love_it } } }
         it "raises an error" do
           expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
         end

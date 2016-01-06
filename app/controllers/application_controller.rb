@@ -6,10 +6,10 @@ class ApplicationController < ActionController::Base
   helper_method :vote_types
 
   def vote_types
-    [["I hate it", -2],
-     ["I'm against it", -1],
-     ["I like it", 1],
-     ["I love it", 2]
+    [["I hate it", :hate_it],
+     ["I'm against it", :against_it],
+     ["I like it", :like_it],
+     ["I love it", :love_it]
     ]
   end
 end
