@@ -2,7 +2,7 @@ class VotesController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    vote = current_quote.votes.create vote_params.merge(user: current_user)
+    vote = current_quote.votes.new vote_params.merge(user: current_user)
     if vote.save
       flash[:notice] = "Voted!"
     else
