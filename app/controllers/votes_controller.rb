@@ -13,6 +13,13 @@ class VotesController < ApplicationController
     redirect_to quotes_path
   end
 
+  def update
+    @quote = Quote.find params[:quote_id]
+    @vote = current_user.votes.find params[:id]
+    flash[:notice] = "Vote updated" if @vote.update vote_params
+    redirect_to quotes_path
+  end
+
   private
 
   def vote_params
