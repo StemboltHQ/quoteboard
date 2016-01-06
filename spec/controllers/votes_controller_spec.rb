@@ -89,4 +89,35 @@ RSpec.describe VotesController, type: :controller do
       end
     end
   end
+
+  describe "#destroy" do
+    subject { delete :destroy, params }
+    let(:params) { { quote_id: quote.id, id: vote.id } }
+    context "without a signed in user" do
+      it { is_expected.to redirect_to new_user_session_path }
+    end
+
+    context "with a signed in user" do
+      before { login_with user }
+      context "user owns the vote" do
+        it { is_expected.to redirect_to quotes_path }
+
+        it "deletes the vote" do
+          subject
+          expect(Vote.find_by(id: vote.id)).to_not be
+        end
+
+        it "sets a notice" do
+          subject
+          expect(flash[:notice]).to include("Vote deleted")
+        end
+      end
+      context "user doesn't own the vote" do
+        before { login_with create(:user) }
+        it "raises an error" do
+          expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+  end
 end
