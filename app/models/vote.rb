@@ -2,6 +2,7 @@ class Vote < ActiveRecord::Base
   VALID_VALUES = [-2, -1, 1, 2]
 
   validates :value, presence: true
+  validates :user_id, uniqueness: { scope: :quote_id }
   validate :validate_value
 
   belongs_to :user

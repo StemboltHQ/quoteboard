@@ -1,0 +1,36 @@
+class VotesController < ApplicationController
+  before_action :authenticate_user!
+
+  def create
+    vote = current_quote.votes.create vote_params.merge(user: current_user)
+    if vote.save
+      flash[:notice] = "Voted!"
+    else
+      flash[:alert] = "Something went wrong!"
+    end
+    redirect_to quotes_path
+  end
+
+  def update
+    @quote = current_quote
+    vote = @quote.votes.find_by!(user: current_user)
+    flash[:notice] = "Vote updated" if vote.update vote_params
+    redirect_to quotes_path
+  end
+
+  def destroy
+    @vote = current_user.votes.find params[:id]
+    flash[:notice] = "Vote deleted" if @vote.destroy
+    redirect_to quotes_path
+  end
+
+  private
+
+  def vote_params
+    params.require(:vote).permit(:value)
+  end
+
+  def current_quote
+    Quote.find params[:quote_id]
+  end
+end
