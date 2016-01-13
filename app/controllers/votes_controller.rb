@@ -3,19 +3,15 @@ class VotesController < ApplicationController
 
   def create
     vote = current_quote.votes.new vote_params.merge(user: current_user)
-    if vote.save
-      flash[:notice] = "Voted!"
-    else
-      flash[:alert] = "Something went wrong!"
-    end
-    redirect_to quotes_path
+    vote.save
+    redirect_to quotes_path, notice: "Voted!" # error thrown if save fails
   end
 
   def update
     @quote = current_quote
     vote = @quote.votes.find_by!(user: current_user)
-    flash[:notice] = "Vote updated" if vote.update vote_params
-    redirect_to quotes_path
+    vote.update vote_params
+    redirect_to quotes_path, notice: "Vote updated" # error thrown if update fails
   end
 
   def destroy
