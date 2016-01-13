@@ -1,3 +1,6 @@
 <% @quotes.each do |quote| %>
-  <%= render quote %>
+  <div class="well">
+    <%= link_to "->", quote %>
+    <%= render quote, vote: quote.votes.find_by(user: current_user) %>
+  </div>
 <% end %>

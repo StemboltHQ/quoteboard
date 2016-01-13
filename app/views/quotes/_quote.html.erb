@@ -1,7 +1,9 @@
+<%= quote.quoted_person %> said, <q><%= quote.body %></q>, <%= quote.location %>.
+<% if quote.created_by == current_user %>
+  <%= link_to "delete quote", quote_path(quote), method: :delete  %>
+  <%= link_to "edit quote", edit_quote_path(quote) %>
+<% end %>
+<%= render 'votes/voting', quote: quote, vote: vote %>
 <div>
-  <%= quote.quoted_person %> said, <q><%= quote.body %></q>, <%= quote.location %>.
-  <% if quote.created_by == current_user %>
-    <%= link_to "delete quote", quote_path(quote), method: :delete  %>
-    <%= link_to "edit quote", edit_quote_path(quote) %>
-  <% end %>
+  Quote Love: <%= quote.score %>
 </div>
