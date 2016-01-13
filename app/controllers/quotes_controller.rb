@@ -1,6 +1,5 @@
 class QuotesController < ApplicationController
   before_action :authenticate_user!
-  helper_method :vote_types
 
   def show
     @quote = Quote.find params[:id]
@@ -50,13 +49,5 @@ class QuotesController < ApplicationController
 
   def quote_params
     params.require(:quote).permit(:body, :quoted_person, :location)
-  end
-
-  def vote_types
-    [["I hate it", -2],
-     ["I'm against it", -1],
-     ["I like it", 1],
-     ["I love it", 2]
-    ]
   end
 end
