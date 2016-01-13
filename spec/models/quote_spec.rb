@@ -10,14 +10,15 @@ RSpec.describe Quote, type: :model do
   end
 
   describe "#score" do
+    number = I18n.t(:votes).keys.last
     before do
-      Vote.create(quote: nil, value: 2)
-      quote.votes.create(value: 2, user: user)
-      quote.votes.create(value: 2, user: create(:user))
+      Vote.create(quote: nil, value: number)
+      quote.votes.create(value: number, user: user)
+      quote.votes.create(value: number, user: create(:user))
     end
 
     it "has a score function that tallies votes" do
-      expect(quote.score).to eq(4)
+      expect(quote.score).to eq(Vote.values[number] * 2)
     end
   end
 end
