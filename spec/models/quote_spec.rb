@@ -4,11 +4,6 @@ RSpec.describe Quote, type: :model do
   let(:quote) { FactoryGirl.create(:quote) }
   let(:user) { FactoryGirl.create(:user) }
 
-  it "requires a body" do
-    quote.body = nil
-    expect(quote).to be_invalid
-  end
-
   describe "#score" do
     before do
       create(:vote, value: 2, quote: nil)
