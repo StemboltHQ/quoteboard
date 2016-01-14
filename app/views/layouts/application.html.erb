@@ -8,11 +8,9 @@
   </head>
   <body>
     <div class="container">
-      <div>
-        <%= link_to "Add Quote", new_quote_path %>
-        <%= link_to "All Quotes", quotes_path %>
+      <div class="navbar-container">
         <% if current_user %>
-          <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
+          <%= render "layouts/navbar" %>
         <% end %>
       </div>
       <% if alert %>
