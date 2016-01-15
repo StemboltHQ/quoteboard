@@ -13,27 +13,39 @@ RSpec.describe VotesController, type: :controller do
     end
     context "with a signed in user" do
       before { login_with user }
-      context "with valid parameters" do
+      context "when a vote doesn't exist from the user" do
+        context "with valid parameters" do
+          let(:params) { { quote_id: quote.id, vote: attributes_for(:vote) } }
+          it { is_expected.to redirect_to quotes_path }
+
+          it "creates a vote associated with the user in the database" do
+            expect { subject }.to change { user.votes(true).count }.from(0).to(1)
+          end
+
+          it "creates a vote in the database associated with the quote" do
+            expect { subject }.to change { quote.votes(true).count }.from(0).to(1)
+          end
+
+          it "sets a flash notice" do
+            subject
+            expect(flash[:notice]).to include("Voted!")
+          end
+        end
+        context "with invalid parameters" do
+          let(:params) { { quote_id: quote.id, vote: { value: :i_am_indifferent } } }
+          it "doesn't create a vote" do
+            expect { subject }.to raise_error(ArgumentError)
+          end
+        end
+      end
+      context "When a vote exists from the user" do
+        before { vote }
         let(:params) { { quote_id: quote.id, vote: attributes_for(:vote) } }
         it { is_expected.to redirect_to quotes_path }
 
-        it "creates a vote associated with the user in the database" do
-          expect { subject }.to change { user.votes(true).count }.from(0).to(1)
-        end
-
-        it "creates a vote in the database associated with the quote" do
-          expect { subject }.to change { quote.votes(true).count }.from(0).to(1)
-        end
-
-        it "sets a flash notice" do
+        it "shows a flash message" do
           subject
-          expect(flash[:notice]).to include("Voted!")
-        end
-      end
-      context "with invalid parameters" do
-        let(:params) { { quote_id: quote.id, vote: { value: :i_am_indifferent } } }
-        it "doesn't create a vote" do
-          expect { subject }.to raise_error(ArgumentError)
+          expect(flash[:alert]).to include("already voted?")
         end
       end
     end
