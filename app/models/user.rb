@@ -20,4 +20,7 @@ class User < ActiveRecord::Base
     end
     user
   end
+
+  has_many :favourites, dependent: :destroy
+  has_many :favourite_quotes, through: :favourites, source: :quote
 end
