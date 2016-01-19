@@ -5,6 +5,7 @@ class QuotesController < ApplicationController
     @quote = Quote.find params[:id]
     @vote = @quote.votes.find_by(user: current_user)
     @user_votes = current_user.votes
+    @user_favourites = current_user.favourite_quotes
   end
 
   def edit
@@ -37,6 +38,7 @@ class QuotesController < ApplicationController
   def index
     @quotes = Quote.order(created_at: :desc)
     @user_votes = current_user.votes
+    @user_favourites = current_user.favourite_quotes
   end
 
   def destroy
