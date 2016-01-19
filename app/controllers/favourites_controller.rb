@@ -17,6 +17,11 @@ class FavouritesController < ApplicationController
     redirect_to quotes_path, notice: "Favourite removed."
   end
 
+  def favourite_quotes
+    @user_favourites = current_user.favourite_quotes
+    @user_votes = current_user.votes
+  end
+
   private
 
   def current_quote

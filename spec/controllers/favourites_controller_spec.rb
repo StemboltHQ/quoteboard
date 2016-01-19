@@ -75,4 +75,20 @@ RSpec.describe FavouritesController, type: :controller do
       end
     end
   end
+
+  describe "#favourite_quotes" do
+    subject { get :favourite_quotes }
+    context "without a logged in user" do
+      it { is_expected.to redirect_to new_user_session_path }
+    end
+    context "with a logged in user" do
+      before { login_with user }
+      it { is_expected.to render_template(:favourite_quotes) }
+
+      it "instantiates a variable containing all favourite quotes" do
+        subject
+        expect(assigns(:user_favourites)).to eq(user.favourite_quotes)
+      end
+    end
+  end
 end
