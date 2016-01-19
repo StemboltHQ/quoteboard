@@ -11,6 +11,12 @@ class FavouritesController < ApplicationController
     redirect_to quotes_path
   end
 
+  def destroy
+    favourite = current_user.favourites.find params[:id]
+    favourite.destroy
+    redirect_to quotes_path, notice: "Favourite removed."
+  end
+
   private
 
   def current_quote

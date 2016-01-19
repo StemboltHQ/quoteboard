@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe FavouritesController, type: :controller do
   let(:user) { create(:user) }
   let(:quote) { create(:quote) }
+  let(:favourite) { create(:favourite, user: user, quote: quote) }
 
   describe "#create" do
     subject { post :create, params }
@@ -37,6 +38,39 @@ RSpec.describe FavouritesController, type: :controller do
 
         it "Does not create a new favourite" do
           expect { subject }.to_not change { user.favourites.count }
+        end
+      end
+    end
+  end
+
+  describe "#destroy" do
+    subject { delete :destroy, params }
+    context "without a logged in user" do
+      let(:params) { { quote_id: quote, id: favourite.id } }
+      it { is_expected.to redirect_to new_user_session_path }
+    end
+
+    context "with a logged in user" do
+      before { login_with user }
+      context "with a user that owns the favourite" do
+        let(:params) { { quote_id: quote, id: favourite.id } }
+        it { is_expected.to redirect_to quotes_path }
+
+        it "deletes the vote" do
+          subject
+          expect(Favourite.find_by(id: favourite.id)).to be_nil
+        end
+
+        it "sets a flash notice" do
+          subject
+          expect(flash[:notice]).to include("Favourite removed.")
+        end
+      end
+      context "with a user that doesn't own the favourite" do
+        before { login_with create(:user) }
+        let(:params) { { quote_id: quote.id, id: favourite.id } }
+        it "raises an error" do
+          expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
     end
