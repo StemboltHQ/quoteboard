@@ -1,5 +1,5 @@
 <%= simple_form_for @quote do |f| %>
-  <%= f.input :quoted_person %>
+  <%= f.input :quoted_person, collection: t(:users) %>
   <%= f.input :body %>
   <%= f.input :location %>
   Please format as shown below:
