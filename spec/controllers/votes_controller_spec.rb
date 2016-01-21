@@ -13,34 +13,39 @@ RSpec.describe VotesController, type: :controller do
     end
     context "with a signed in user" do
       before { login_with user }
-      context "with valid parameters" do
+      context "when a vote doesn't exist from the user" do
+        context "with valid parameters" do
+          let(:params) { { quote_id: quote.id, vote: attributes_for(:vote) } }
+          it { is_expected.to redirect_to quotes_path }
+
+          it "creates a vote associated with the user in the database" do
+            expect { subject }.to change { user.votes(true).count }.from(0).to(1)
+          end
+
+          it "creates a vote in the database associated with the quote" do
+            expect { subject }.to change { quote.votes(true).count }.from(0).to(1)
+          end
+
+          it "sets a flash notice" do
+            subject
+            expect(flash[:notice]).to include("Voted!")
+          end
+        end
+        context "with invalid parameters" do
+          let(:params) { { quote_id: quote.id, vote: { value: :i_am_indifferent } } }
+          it "doesn't create a vote" do
+            expect { subject }.to raise_error(ArgumentError)
+          end
+        end
+      end
+      context "When a vote exists from the user" do
+        before { vote }
         let(:params) { { quote_id: quote.id, vote: attributes_for(:vote) } }
         it { is_expected.to redirect_to quotes_path }
 
-        it "creates a vote associated with the user in the database" do
-          expect { subject }.to change { user.votes(true).count }.from(0).to(1)
-        end
-
-        it "creates a vote in the database associated with the quote" do
-          expect { subject }.to change { quote.votes(true).count }.from(0).to(1)
-        end
-
-        it "sets a flash notice" do
+        it "shows a flash message" do
           subject
-          expect(flash[:notice]).to include("Voted!")
-        end
-      end
-      context "with invalid parameters" do
-        let(:params) { { quote_id: quote.id, vote: { value: 55 } } }
-        it { is_expected.to redirect_to quotes_path }
-
-        it "sets a flash alert message" do
-          subject
-          expect(flash[:alert]).to include("Something")
-        end
-
-        it "doesn't create a vote" do
-          expect { subject }.to change { Vote.count }.by(0)
+          expect(flash[:alert]).to include("already voted?")
         end
       end
     end
@@ -57,12 +62,12 @@ RSpec.describe VotesController, type: :controller do
       before { login_with user }
       context "with a user that owns the vote" do
         context "with a valid update value" do
-          let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: 2 } } }
+          let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: :love_it } } }
           it { is_expected.to redirect_to quotes_path }
 
           it "changes the vote value" do
             subject
-            expect(vote.reload.value).to eq(2)
+            expect(vote.reload.value).to eq("love_it")
           end
 
           it "sets a flash notice" do
@@ -71,18 +76,17 @@ RSpec.describe VotesController, type: :controller do
           end
         end
         context "with an invalid update value" do
-          let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: 99 } } }
-          it { is_expected.to redirect_to quotes_path }
+          let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: :unsure } } }
 
           it "doesn't change the vote value" do
-            subject
-            expect(vote.reload.value).to eq(1)
+            expect { subject }.to raise_error(ArgumentError)
           end
         end
       end
       context "with a user that doesn't own the vote" do
         before { login_with create(:user) }
-        let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: 2 } } }
+        let(:params) { { quote_id: quote.id, id: vote.id, vote: { value: :love_it } } }
+
         it "raises an error" do
           expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
         end

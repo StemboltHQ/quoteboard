@@ -10,6 +10,7 @@ RSpec.describe Quote, type: :model do
   end
 
   describe "#score" do
+    number = Vote.values.keys.last
     before do
       create(:vote, value: 2, quote: nil)
       create(:vote, quote: quote, value: 2)
@@ -17,7 +18,7 @@ RSpec.describe Quote, type: :model do
     end
 
     it "has a score function that tallies votes" do
-      expect(quote.score).to eq(4)
+      expect(quote.score).to eq(Vote.values[number] * 2)
     end
   end
 end
