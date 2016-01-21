@@ -8,7 +8,7 @@ class Vote < ActiveRecord::Base
   ].freeze
 
   validates :value, presence: true
-  validates :user_id, uniqueness: { scope: :quote_id }
+  validates :user, uniqueness: { scope: :quote }
   validate :validate_value
 
   belongs_to :user
