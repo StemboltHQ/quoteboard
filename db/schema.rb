@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160115181505) do
+ActiveRecord::Schema.define(version: 20160118214828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "favourites", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "quote_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "favourites", ["quote_id"], name: "index_favourites_on_quote_id", using: :btree
+  add_index "favourites", ["user_id"], name: "index_favourites_on_user_id", using: :btree
 
   create_table "quotes", force: :cascade do |t|
     t.string   "quoted_person"
@@ -60,6 +70,8 @@ ActiveRecord::Schema.define(version: 20160115181505) do
   add_index "votes", ["quote_id"], name: "index_votes_on_quote_id", using: :btree
   add_index "votes", ["user_id"], name: "index_votes_on_user_id", using: :btree
 
+  add_foreign_key "favourites", "quotes"
+  add_foreign_key "favourites", "users"
   add_foreign_key "quotes", "users"
   add_foreign_key "votes", "quotes"
   add_foreign_key "votes", "users"
