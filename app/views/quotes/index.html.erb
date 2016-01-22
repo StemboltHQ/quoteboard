@@ -1,6 +1,1 @@
-<% @quotes.each do |quote| %>
-  <div class="well">
-    <%= link_to "->", quote %>
-    <%= render quote %>
-  </div>
-<% end %>
+<%= render "quote_list", quotes: @quotes %>
