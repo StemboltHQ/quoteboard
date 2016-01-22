@@ -11,6 +11,7 @@
       <div>
         <%= link_to "Add Quote", new_quote_path %>
         <%= link_to "All Quotes", quotes_path %>
+        <%= link_to "Highest Rated Quotes", best_quotes_path %>
         <% if current_user %>
           <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
         <% end %>

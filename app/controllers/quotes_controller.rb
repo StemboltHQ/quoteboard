@@ -45,6 +45,11 @@ class QuotesController < ApplicationController
     redirect_to quotes_path
   end
 
+  def best
+    @quotes = Quote.all.sort_by(&:score).reverse
+    @user_votes = current_user.votes
+  end
+
   private
 
   def quote_params
