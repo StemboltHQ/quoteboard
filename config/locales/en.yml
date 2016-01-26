@@ -21,3 +21,23 @@
 
 en:
   hello: "Hello world"
+  users: [
+    "Adam Mueller",
+    "Alex Blackie",
+    "Amanda Healey",
+    "Andrew Stewart",
+    "Brendan Deere",
+    "Chris Todorov",
+    "Clarke Brundson",
+    "Dylan Kendal",
+    "Gray Gilmore",
+    "Gregor MacDougall",
+    "Jared Norman",
+    "John Hawthorn",
+    "Kevin Attfield",
+    "Luuk Veenis",
+    "Murphy Stroppa",
+    "Richard Wilson",
+    "Sean Taylor",
+    "Susan Aili"
+  ]
