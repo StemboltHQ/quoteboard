@@ -50,6 +50,15 @@ class QuotesController < ApplicationController
   private
 
   def quote_params
-    params.require(:quote).permit(:body, :quoted_person, :location)
+    raw_params.merge(person: quoted_person)
+  end
+
+  def raw_params
+    params.require(:quote).permit(:body, :location, :quoted_person)
+  end
+
+  def quoted_person
+    return unless raw_params[:quoted_person]
+    person = Person.find_or_create_by(full_name: raw_params[:quoted_person])
   end
 end
