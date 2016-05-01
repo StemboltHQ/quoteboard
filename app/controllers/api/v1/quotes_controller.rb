@@ -20,6 +20,12 @@ class Api::V1::QuotesController < ActionController::Base
   end
 
   def quoted_person
-    Person.find_or_create_by(full_name: raw_params[:quoted_person])
+    return unless raw_params[:quoted_person]
+    person = raw_params[:quoted_person]
+    if person.starts_with('@')
+      Person.find_or_create_by(slack_name: person)
+    else
+      Person.find_or_create_by(full_name: person)
+    end
   end
 end

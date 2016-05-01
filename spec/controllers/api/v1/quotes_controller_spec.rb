@@ -6,7 +6,7 @@ RSpec.describe Api::V1::QuotesController, type: :controller do
   describe '#create' do
     subject { post :create, params.merge(format: :json) }
     context 'with valid parameters' do
-      let(:params) { { quote: attributes_for(:quote) } }
+      let(:params) { { quote: attributes_for(:quote).merge(quoted_person: "@john") } }
       it { is_expected.to render_template(:show) }
 
       it 'sets the correct status' do

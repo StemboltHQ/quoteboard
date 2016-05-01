@@ -20,6 +20,7 @@ RSpec.describe Api::V1::PeopleController, type: :controller do
     end
 
     context 'with invalid parameters' do
+      before { Person.create(slack_name: "John") }
       let(:params) { { person: { slack_name: "John" } } }
 
       it 'sets the correct status' do
