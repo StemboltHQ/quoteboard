@@ -127,7 +127,7 @@ RSpec.describe QuotesController, type: :controller do
       before { login_with user }
       context "with quote owner" do
         context 'with valid update attributes' do
-          subject { patch :update, id: quote.id, quote: { body: "hello" } }
+          subject { patch :update, id: quote.id, quote: { body: "hello", quoted_person: "Franky G" } }
           it { is_expected.to redirect_to quote_path(quote) }
 
           it 'updates the passed values in the database' do
