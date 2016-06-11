@@ -3,6 +3,15 @@
   <%= link_to "delete quote", quote_path(quote), method: :delete, data: { confirm: "Delete quote?" } %>
   <%= link_to "edit quote", edit_quote_path(quote) %>
 <% end %>
+<% if @user_favourites.include? quote %>
+  <%= link_to "Unfavourite quote", quote_favourite_path(
+    quote,
+    quote.favourites.find_by(user: current_user)
+  ),
+  method: :delete %>
+<% else %>
+  <%= link_to "Favourite quote", quote_favourites_path(quote), method: :post %>
+<% end %>
 <%=
   render 'votes/voting',
   quote: quote,
