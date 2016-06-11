@@ -1,11 +1,10 @@
 <% if @user_votes.include? vote %>
-  <% Vote::VOTE_TYPES.each do |reason, value| %>
-    <%= link_to reason, quote_vote_path(quote, vote, { vote: { value: value } } ), method: :patch %>
+  <% Vote.values.keys.each do |opinion| %>
+    <%= link_to t(opinion, scope: :votes), quote_vote_path(quote, vote, { vote: { value: opinion } }), method: :patch %>
   <% end %>
   <%= link_to "Erase my vote", quote_vote_path(quote, vote), method: :delete %>
 <% else %>
-  <% Vote::VOTE_TYPES.each do |reason, value| %>
-    <%= link_to reason, quote_votes_path(quote, { vote: { value: value } } ), method: :post %>
+  <% Vote.values.keys.each do |opinion| %>
+    <%= link_to t(opinion, scope: :votes), quote_votes_path(quote, { vote: { value: opinion } }), method: :post %>
   <% end %>
 <% end %>
-
