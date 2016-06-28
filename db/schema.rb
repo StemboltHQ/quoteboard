@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160118214828) do
+ActiveRecord::Schema.define(version: 20160430175742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(version: 20160118214828) do
   add_index "favourites", ["quote_id"], name: "index_favourites_on_quote_id", using: :btree
   add_index "favourites", ["user_id"], name: "index_favourites_on_user_id", using: :btree
 
+  create_table "people", force: :cascade do |t|
+    t.string   "full_name"
+    t.string   "slack_name"
+    t.boolean  "employee"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "quotes", force: :cascade do |t|
     t.string   "quoted_person"
     t.text     "body"
@@ -33,8 +41,10 @@ ActiveRecord::Schema.define(version: 20160118214828) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "user_id"
+    t.integer  "person_id"
   end
 
+  add_index "quotes", ["person_id"], name: "index_quotes_on_person_id", using: :btree
   add_index "quotes", ["user_id"], name: "index_quotes_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -72,6 +82,7 @@ ActiveRecord::Schema.define(version: 20160118214828) do
 
   add_foreign_key "favourites", "quotes"
   add_foreign_key "favourites", "users"
+  add_foreign_key "quotes", "people"
   add_foreign_key "quotes", "users"
   add_foreign_key "votes", "quotes"
   add_foreign_key "votes", "users"
