@@ -1,3 +1,8 @@
+<% if @quote.errors.any? %>
+  <% @quote.errors.each do |msg| %>
+    <%= msg == :person_id ? 'Enter a quoted person' : msg %>
+  <% end %>
+<% end %>
 <%= simple_form_for @quote do |f| %>
   <%= f.input :quoted_person %>
   <%= f.input :body %>
