@@ -4,10 +4,7 @@ RSpec.describe Quote, type: :model do
   let(:quote) { FactoryGirl.create(:quote) }
   let(:user) { FactoryGirl.create(:user) }
 
-  it "requires a body" do
-    quote.body = nil
-    expect(quote).to be_invalid
-  end
+  it { is_expected.to validate_presence_of(:body) }
 
   describe "#score" do
     number = I18n.t(:votes).keys.last
